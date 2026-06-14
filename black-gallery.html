@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRY OR DIE</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#f5f5f5;
+    text-align:center;
+    padding:20px;
+    margin:0;
+}
+
+.slider-wrapper{
+    max-width:500px;
+    margin:auto;
+    position:relative;
+    overflow:hidden;
+    border-radius:12px;
+}
+
+.slider-track{
+    display:flex;
+    transition:transform 0.4s ease;
+    cursor:grab;
+}
+
+.slider-track:active{
+    cursor:grabbing;
+}
+
+.slide{
+    min-width:100%;
+}
+
+.slide img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:12px;
+    pointer-events:none;
+}
+
+.dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:12px;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#ccc;
+    cursor:pointer;
+    transition:background 0.3s;
+}
+
+.dot.active{
+    background:#000;
+}
+
+.info{
+    margin-top:25px;
+}
+
+.info h1{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.price{
+    color:#000;
+    font-size:22px;
+    font-weight:bold;
+    margin-top:8px;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:15px;
+    background:black;
+    color:white;
+    text-decoration:none;
+    padding:12px 30px;
+    border-radius:5px;
+    font-size:16px;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-bottom:20px;
+    color:#000;
+    text-decoration:none;
+    font-size:14px;
+}
+</style>
+
+</head>
+<body>
+
+<a href="./index.html" class="back-btn">← Back</a>
+
+<div class="slider-wrapper">
+    <div class="slider-track" id="track">
+        <div class="slide"><img src="black1.png"></div>
+        <div class="slide"><img src="black2.png"></div>
+        <div class="slide"><img src="black3.png"></div>
+        <div class="slide"><img src="black4.png"></div>
+        <div class="slide"><img src="black5.png"></div>
+    </div>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<div class="info">
+    <h1>TRY OR DIE</h1>
+    <p class="price">550 EGP</p>
+   <a href="./order.html?product=TRY OR DIE (Black)&img=black1.png" class="btn">ORDER NOW</a>
+</div>
+
+<script>
+const track = document.getElementById('track');
+const dotsContainer = document.getElementById('dots');
+const total = track.children.length;
+let current = 0;
+let startX = 0;
+let isDragging = false;
+let dragOffset = 0;
+
+// create dots
+for(let i = 0; i < total; i++){
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+}
+
+function updateDots(){
+    document.querySelectorAll('.dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+    });
+}
+
+function goTo(index){
+    current = Math.max(0, Math.min(index, total - 1));
+    track.style.transition = 'transform 0.4s ease';
+    track.style.transform = `translateX(-${current * 100}%)`;
+    updateDots();
+}
+
+// Touch
+track.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    track.style.transition = 'none';
+});
+
+track.addEventListener('touchmove', e => {
+    dragOffset = e.touches[0].clientX - startX;
+    track.style.transform = `translateX(calc(-${current * 100}% + ${dragOffset}px))`;
+});
+
+track.addEventListener('touchend', () => {
+    if(dragOffset < -50) goTo(current + 1);
+    else if(dragOffset > 50) goTo(current - 1);
+    else goTo(current);
+    dragOffset = 0;
+});
+
+// Mouse drag
+track.addEventListener('mousedown', e => {
+    isDragging = true;
+    startX = e.clientX;
+    track.style.transition = 'none';
+});
+
+window.addEventListener('mousemove', e => {
+    if(!isDragging) return;
+    dragOffset = e.clientX - startX;
+    track.style.transform = `translateX(calc(-${current * 100}% + ${dragOffset}px))`;
+});
+
+window.addEventListener('mouseup', () => {
+    if(!isDragging) return;
+    isDragging = false;
+    if(dragOffset < -50) goTo(current + 1);
+    else if(dragOffset > 50) goTo(current - 1);
+    else goTo(current);
+    dragOffset = 0;
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order - ZEVARA</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f5f5f5;
+    min-height:100vh;
+}
+
+header{
+    background:black;
+    color:white;
+    text-align:center;
+    padding:15px;
+    font-size:20px;
+    font-weight:bold;
+    letter-spacing:3px;
+}
+
+.container{
+    max-width:500px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.product-summary{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.product-summary img{
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.product-summary-info h3{
+    font-size:14px;
+    font-weight:bold;
+}
+
+.product-summary-info p{
+    font-size:14px;
+    color:#555;
+    margin-top:4px;
+}
+
+.form-card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom:20px;
+}
+
+.form-card h2{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:15px;
+    border-bottom:1px solid #eee;
+    padding-bottom:10px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:6px;
+    color:#333;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    transition:border 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#000;
+}
+
+.payment-options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.payment-option{
+    border:2px solid #ddd;
+    border-radius:10px;
+    padding:12px 15px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:border 0.2s;
+}
+
+.payment-option.selected{
+    border-color:#000;
+    background:#fafafa;
+}
+
+.payment-option input[type="radio"]{
+    width:18px;
+    height:18px;
+    accent-color:#000;
+}
+
+.payment-option span{
+    font-size:14px;
+    font-weight:bold;
+}
+
+.payment-info{
+    display:none;
+    background:#f5f5f5;
+    border-radius:8px;
+    padding:12px;
+    margin-top:12px;
+    font-size:13px;
+    line-height:1.8;
+}
+
+.payment-info.show{
+    display:block;
+}
+
+.payment-info strong{
+    font-size:15px;
+}
+
+.total-card{
+    background:black;
+    color:white;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.total-card span{
+    font-size:14px;
+    opacity:0.8;
+}
+
+.total-card strong{
+    font-size:22px;
+}
+
+.submit-btn{
+    width:100%;
+    background:black;
+    color:white;
+    border:none;
+    padding:16px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    letter-spacing:2px;
+    cursor:pointer;
+    transition:opacity 0.2s;
+}
+
+.submit-btn:hover{
+    opacity:0.85;
+}
+
+.submit-btn:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+}
+
+.success-msg{
+    display:none;
+    text-align:center;
+    padding:40px 20px;
+}
+
+.success-msg .checkmark{
+    font-size:60px;
+    margin-bottom:15px;
+}
+
+.success-msg h2{
+    font-size:22px;
+    margin-bottom:10px;
+}
+
+.success-msg p{
+    font-size:14px;
+    color:#555;
+    line-height:1.6;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:20px;
+    background:black;
+    color:white;
+    text-decoration:none;
+    padding:12px 30px;
+    border-radius:8px;
+    font-size:14px;
+}
+</style>
+</head>
+<body>
+
+<header>ZEVARA</header>
+
+<div class="container">
+
+    <!-- ملخص المنتج -->
+    <div class="product-summary">
+        <img src="" id="productImg">
+        <div class="product-summary-info">
+            <h3>TRY OR DIE</h3>
+            <p id="productName">-</p>
+            <p><strong>550 EGP</strong></p>
+        </div>
+    </div>
+
+    <!-- فورم البيانات -->
+    <div id="orderForm">
+
+        <div class="form-card">
+            <h2>بياناتك</h2>
+
+            <div class="form-group">
+                <label>الاسم كامل</label>
+                <input type="text" id="name" placeholder="اكتب اسمك هنا">
+            </div>
+
+            <div class="form-group">
+                <label>رقم التليفون</label>
+                <input type="tel" id="phone" placeholder="01xxxxxxxxx">
+            </div>
+
+            <div class="form-group">
+                <label>العنوان كامل</label>
+                <input type="text" id="address" placeholder="المحافظة، المدينة، الشارع">
+            </div>
+
+            <div class="form-group">
+                <label>المقاس</label>
+                <select id="size">
+                    <option value="">اختار المقاس</option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>XL</option>
+                    <option>XXL</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h2>طريقة الدفع</h2>
+
+            <div class="payment-options">
+                <label class="payment-option" id="opt-vodafone">
+                    <input type="radio" name="payment" value="Vodafone Cash" onchange="selectPayment('vodafone')">
+                    <span>📱 فودافون كاش</span>
+                </label>
+
+                <label class="payment-option" id="opt-instapay">
+                    <input type="radio" name="payment" value="InstaPay" onchange="selectPayment('instapay')">
+                    <span>💳 انستاباي</span>
+                </label>
+            </div>
+
+            <div class="payment-info" id="info-vodafone">
+                حول المبلغ على رقم فودافون كاش:<br>
+                <strong>01037811655</strong><br>
+                باسم: ZEVARA<br><br>
+                ⚠️ بعد التحويل ابعت صورة الإيصال على واتساب
+            </div>
+
+            <div class="payment-info" id="info-instapay">
+                حول المبلغ على انستاباي:<br>
+                <strong>@zevara</strong><br><br>
+                ⚠️ بعد التحويل ابعت صورة الإيصال على واتساب
+            </div>
+        </div>
+
+        <div class="total-card">
+            <span>الإجمالي</span>
+            <strong>550 EGP</strong>
+        </div>
+
+        <button class="submit-btn" onclick="submitOrder()">تأكيد الأوردر</button>
+
+    </div>
+
+    <!-- رسالة النجاح -->
+    <div class="success-msg" id="successMsg">
+        <div class="checkmark">✅</div>
+        <h2>تم استلام أوردرك!</h2>
+        <p>شكراً ليك، هتوصلك رسالة تأكيد قريباً.<br>متنساش تبعت صورة إيصال التحويل على واتساب.</p>
+        <a href="https://wa.me/201037811655" class="back-btn">ابعت الإيصال على واتساب</a>
+    </div>
+
+</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwuKSrhzsGlbOrebDVsxcJOwdfpCmHZLOlaemWNJiGXkS59Kf1aGvKx7HjjYium0E5y/exec";
+
+// جيب اسم المنتج والصورة من الرابط
+const params = new URLSearchParams(window.location.search);
+const product = params.get('product') || 'TRY OR DIE';
+const img = params.get('img') || 'product1.jpg';
+document.getElementById('productName').textContent = product;
+document.getElementById('productImg').src = img;
+
+function selectPayment(type){
+    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.payment-info').forEach(i => i.classList.remove('show'));
+    document.getElementById('opt-' + type).classList.add('selected');
+    document.getElementById('info-' + type).classList.add('show');
+}
+
+async function submitOrder(){
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const size = document.getElementById('size').value;
+    const payment = document.querySelector('input[name="payment"]:checked');
+
+    if(!name || !phone || !address || !size || !payment){
+        alert('من فضلك اكمل كل البيانات واختار طريقة الدفع');
+        return;
+    }
+
+    const btn = document.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'جاري الإرسال...';
+
+    try {
+        await fetch(SHEET_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                name, phone, address, size,
+                product: product,
+                payment: payment.value
+            })
+        });
+
+        document.getElementById('orderForm').style.display = 'none';
+        document.querySelector('.product-summary').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+
+    } catch(err) {
+        alert('حصل خطأ، جرب تاني');
+        btn.disabled = false;
+        btn.textContent = 'تأكيد الأوردر';
+    }
+}
+</script>
+
+</body>
+</html>
